@@ -1,0 +1,207 @@
+{
+  "$id": "zendesk_privateHelpArticleConnector",
+  "$schema": "https://schema.yext.com/config/km/connector/v3",
+  "displayName": "Zendesk Private Help Article Connector",
+  "entityType": "helpArticle",
+  "source": {
+    "sourceConfig": {
+      "nativeSourceConfig": {
+        "source": "zendesk",
+        "operation": "fetchHelpArticlesAuthenticated",
+        "inputs": {
+          "password": "${{zendeskPassword}}",
+          "username": "${{zendeskUsername}}",
+          "zendeskLocale": "${{zendeskLocale}}",
+          "zendeskSubdomain": "${{zendeskSubdomain}}"
+        }
+      }
+    },
+    "selectors": [
+      {
+        "type": "JSON",
+        "header": "ID",
+        "path": "id"
+      },
+      {
+        "type": "JSON",
+        "header": "URL",
+        "path": "html_url"
+      },
+      {
+        "type": "JSON",
+        "header": "Name",
+        "path": "name"
+      },
+      {
+        "type": "JSON",
+        "header": "Body",
+        "path": "body"
+      },
+      {
+        "type": "JSON",
+        "header": "Label Names",
+        "path": "label_names"
+      },
+      {
+        "type": "JSON",
+        "header": "Promoted",
+        "path": "promoted"
+      },
+      {
+        "type": "JSON",
+        "header": "Vote Count",
+        "path": "vote_count"
+      },
+      {
+        "type": "JSON",
+        "header": "Vote Sum",
+        "path": "vote_sum"
+      },
+      {
+        "type": "JSON",
+        "header": "Date Created",
+        "path": "created_at"
+      },
+      {
+        "type": "JSON",
+        "header": "Date Updated",
+        "path": "updated_at"
+      },
+      {
+        "type": "JSON",
+        "header": "User ID",
+        "path": "user_segment_id"
+      }
+    ]
+  },
+  "transforms": [
+    {
+      "extractText": {
+        "inputHeader": "Date Created",
+        "newColumnHeader": "Date Created_Converted",
+        "extractOperation": "ALL_TEXT_BEFORE",
+        "extractFrom": "FIRST_INSTANCE_MATCHING_TEXT",
+        "valueToFind": {
+          "plainText": {
+            "value": "T",
+            "ignoreCase": false
+          }
+        }
+      }
+    },
+    {
+      "extractText": {
+        "inputHeader": "Date Updated",
+        "newColumnHeader": "Date Updated_Converted",
+        "extractOperation": "ALL_TEXT_BEFORE",
+        "extractFrom": "FIRST_INSTANCE_MATCHING_TEXT",
+        "valueToFind": {
+          "plainText": {
+            "value": "T",
+            "ignoreCase": false
+          }
+        }
+      }
+    },
+    {
+      "function": {
+        "inputHeaders": {
+          "headers": [
+            "User ID"
+          ]
+        },
+        "plugin": "zendesk_fetchUserSegments",
+        "function": "fetchHelpCenterContent"
+      }
+    },
+    {
+      "addColumn": {
+        "newColumnHeader": "External Source",
+        "columnValue": "zendesk"
+      }
+    }
+  ],
+  "mappings": [
+    {
+      "clearValueIfBlank": false,
+      "field": "externalAuthorizedIdentities",
+      "header": "User ID",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "promoted",
+      "header": "Promoted",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "externalArticlePostDate",
+      "header": "Date Created_Converted",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "entityId",
+      "header": "ID",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "keywords",
+      "header": "Label Names",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "voteCount",
+      "header": "Vote Count",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "externalArticleUpdateDate",
+      "header": "Date Updated_Converted",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "body",
+      "header": "Body",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "landingPageUrl",
+      "header": "URL",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "name",
+      "header": "Name",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "voteSum",
+      "header": "Vote Sum",
+      "subfieldPath": []
+    },
+    {
+      "clearValueIfBlank": false,
+      "field": "externalAuthorizationSource",
+      "header": "External Source",
+      "subfieldPath": []
+    }
+  ],
+  "scheduleConfig": {
+    "customSchedule": {
+      "timeZone": "America/New_York",
+      "startDate": "2021-05-19",
+      "startTime": "03:00",
+      "frequencyType": "DAILY"
+    },
+    "runMode": "COMPREHENSIVE"
+  }
+}
