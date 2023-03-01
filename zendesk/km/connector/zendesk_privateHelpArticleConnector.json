@@ -1,5 +1,5 @@
 {
-  "$id": "zendesk_privateHelpArticleConnector",
+  "$id": "zendeskPrivate_privateHelpArticleConnector",
   "$schema": "https://schema.yext.com/config/km/connector/v3",
   "displayName": "Zendesk Private Help Article Connector",
   "entityType": "helpArticle",
@@ -110,7 +110,7 @@
             "User ID"
           ]
         },
-        "plugin": "zendesk_fetchUserSegments",
+        "plugin": "zendeskPrivate_fetchUserSegments",
         "function": "fetchHelpCenterContent"
       }
     },
