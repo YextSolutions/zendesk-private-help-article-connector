@@ -16,7 +16,7 @@ export const fetchHelpCenterContent = async (segmentId: string) => {
       return "";
     };
     const segmentResponse = await fetchPermissions(segmentId);
-    if (segmentResponse === 429) {
+    if (segmentResponse !== 200) {
       return "";
     };
     const segment = segmentResponse.user_segment;
