@@ -9,6 +9,8 @@ If you use Zendesk for Customer Service Management, you may be storing support c
 To use this template, you'll need the following before install:
 
 - Zendesk Subdomain
+- Zendesk Credentials
+- Zendesk Locale
 
 # Installation Instructions
 If you are an existing Yext customer, you can install the Zendesk Private Help Center Connector here <https://www.yext.com/s/me/apps/1002992>
